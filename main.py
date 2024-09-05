@@ -18,9 +18,14 @@ def get_credentials():
 
 class GoogleSheetsImport:
     def __init__(self, sheet_id: str, bucket_name: str, file_name: str):
-        self.sheet_id = sheet_id
-        self.bucket_name = bucket_name
+        # Get Google credentials for bucket and sheet client
+        credentials = get_credentials()
+        storage_client = storage.Client(credentials=credentials)
+
+        self.bucket_client = storage_client.bucket(bucket_name)
+        self.sheet_client = gspread.authorize(credentials)
         self.file_name = file_name
+        self.sheet_id = sheet_id
 
     def process_sheet(self):
         # process the sheet
