@@ -1,8 +1,19 @@
 import logging
 import flask
+import os
+import gspread
+
+from google.cloud import storage
+from google.oauth2.service_account import Credentials
 
 app = flask.Flask(__name__)
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
+
+def get_credentials():
+    # Get credentials from service account key
+    scopes = ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive']
+    return Credentials.from_service_account_file(os.environ["GCP_SERVICE_ACCOUNT_KEY"], scopes=scopes)
 
 
 class GoogleSheetsImport:
